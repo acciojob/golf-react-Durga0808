@@ -3,40 +3,47 @@ import '../styles/App.css';
 
 class App extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             renderBall: false,
-            posi : 0,
-            ballPosition: { left: "0px" }
+            ballPosition: 0,
         };
-        this.renderChoice = this.renderBallOrButton.bind(this)
-        this.buttonClickHandler = this.buttonClickHandler.bind(this)
-    };
-
-    buttonClickHandler() {
-   
-   }
-    renderBallOrButton() {
-		if (this.state.renderBall) {
-		    return <div className="ball" style={this.state.ballPosition}></div>
-		} else {
-		    return <button onClick={this.buttonClickHandler} >Start</button>
-		}
+        this.buttonClickHandler = this.buttonClickHandler.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
-    // bind ArrowRight keydown event
+    buttonClickHandler() {
+        this.setState({ renderBall: true });
+        document.addEventListener("keydown", this.handleKeyDown);
+    }
+
+    handleKeyDown(event) {
+        if (event.key === "ArrowRight") {
+            this.setState((prevState) => ({
+                ballPosition: prevState.ballPosition + 5,
+            }));
+        }
+    }
+
     componentDidMount() {
-      
+        document.addEventListener("keydown", this.handleKeyDown);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleKeyDown);
     }
 
     render() {
         return (
             <div className="playground">
-                {this.renderBallOrButton()}
+                {this.state.renderBall ? (
+                    <div className="ball" style={{ left: `${this.state.ballPosition}px` }}></div>
+                ) : (
+                    <button onClick={this.buttonClickHandler}>Start</button>
+                )}
             </div>
-        )
+        );
     }
 }
-
 
 export default App;
