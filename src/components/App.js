@@ -1,4 +1,4 @@
-import React, { Component} from "react";
+import React, { Component } from "react";
 import '../styles/App.css';
 
 class App extends Component {
@@ -6,7 +6,7 @@ class App extends Component {
         super(props)
         this.state = {
             renderBall: false,
-            posi : 0,
+            posi: 0,
             ballPosition: { left: "0px" }
         };
         this.renderChoice = this.renderBallOrButton.bind(this)
@@ -17,29 +17,31 @@ class App extends Component {
     buttonClickHandler() {
         this.setState({ renderBall: true });
         document.addEventListener("keydown", this.handleKeyDown);
-   }
-   handleKeyDown(event) {
-    if (event.key === "ArrowRight") {
-        this.setState((prevState) => ({
-            ballPosition: {
-                left: `${parseInt(prevState.ballPosition.left) + 5}px`
-            }
-        }));
     }
-}
+    handleKeyDown(event) {
+        if (event.key === "ArrowRight") {
+            this.setState((prevState) => ({
+                ballPosition: {
+                    left: `${parseInt(prevState.ballPosition.left) + 5}px`
+                }
+            }), () => {
+                console.log("Ball position:", this.state.ballPosition);
+            });
+        }
+    }
 
     renderBallOrButton() {
-		if (this.state.renderBall) {
-		    return <div className="ball" style={this.state.ballPosition}></div>
-		} else {
-		    return <button className="start" onClick={this.buttonClickHandler} >Start</button>
-		}
+        if (this.state.renderBall) {
+            return <div className="ball" style={this.state.ballPosition}></div>
+        } else {
+            return <button className="start" onClick={this.buttonClickHandler} >Start</button>
+        }
     }
 
     componentDidMount() {
         document.addEventListener("keydown", this.handleKeyDown);
     }
-    
+
     componentWillUnmount() {
         document.removeEventListener("keydown", this.handleKeyDown);
     }
