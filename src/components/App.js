@@ -22,7 +22,7 @@ class App extends Component {
     if (event.key === "ArrowRight") {
         this.setState((prevState) => ({
             posi: prevState.posi + 5,
-            ballPosition: { left: `${this.state.posi}px` }
+            ballPosition: { left: `${prevState.posi + 5}px` }
         }));
     }
 }
