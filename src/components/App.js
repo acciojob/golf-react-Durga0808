@@ -3,32 +3,41 @@ import '../styles/App.css';
 
 class App extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             renderBall: false,
-            ballPosition: 0,
+            posi : 0,
+            ballPosition: { left: "0px" }
         };
-        this.buttonClickHandler = this.buttonClickHandler.bind(this);
+        this.renderChoice = this.renderBallOrButton.bind(this)
+        this.buttonClickHandler = this.buttonClickHandler.bind(this)
         this.handleKeyDown = this.handleKeyDown.bind(this);
-    }
+    };
 
     buttonClickHandler() {
         this.setState({ renderBall: true });
         document.addEventListener("keydown", this.handleKeyDown);
+   }
+   handleKeyDown(event) {
+    if (event.key === "ArrowRight") {
+        this.setState((prevState) => ({
+            posi: prevState.posi + 5,
+            ballPosition: { left: `${this.state.posi}px` }
+        }));
     }
-
-    handleKeyDown(event) {
-        if (event.key === "ArrowRight") {
-            this.setState((prevState) => ({
-                ballPosition: prevState.ballPosition + 5,
-            }));
-        }
+}
+    renderBallOrButton() {
+		if (this.state.renderBall) {
+		    return <div className="ball" style={this.state.ballPosition}></div>
+		} else {
+		    return <button className="start" onClick={this.buttonClickHandler} >Start</button>
+		}
     }
 
     componentDidMount() {
         document.addEventListener("keydown", this.handleKeyDown);
     }
-
+    
     componentWillUnmount() {
         document.removeEventListener("keydown", this.handleKeyDown);
     }
@@ -36,14 +45,11 @@ class App extends Component {
     render() {
         return (
             <div className="playground">
-                {this.state.renderBall ? (
-                    <div className="ball" style={{ left: `${this.state.ballPosition}px` }}></div>
-                ) : (
-                    <button onClick={this.buttonClickHandler}>Start</button>
-                )}
+                {this.renderBallOrButton()}
             </div>
-        );
+        )
     }
 }
+
 
 export default App;
